@@ -9,6 +9,10 @@
 
 " vim: set noet fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 
+if !exists("s:init")
+    let s:init = 1
+    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+endif
 
 "----------------------------------------------------------------------
 " Global Options
@@ -414,6 +418,7 @@ function! <SID>quickmenu_execute(index) abort
 		if type(item.event) == 1
 			if item.event[0] != '='
 				exec item.event
+				silent! call s:log.debug("exec quickmenu.event=", item.event)
 			else
 				let script = matchstr(item.event, '^=\s*\zs.*')
 			endif
@@ -497,6 +502,7 @@ endfunc
 function! s:menu_expand(item) abort
 	let items = []
 	let text = s:expand_text(a:item.text)
+	let event = s:expand_text(a:item.event)
 	let help = ''
 	let index = 0
 	let padding = repeat(' ', g:quickmenu_padding_left)
@@ -514,7 +520,9 @@ function! s:menu_expand(item) abort
 				let item.text = '[' . a:item.key.']  '.curline
 				let index += 1
 				let item.key = a:item.key
-				let item.event = a:item.event
+				"let item.event = a:item.event
+				let item.event = event
+				silent! call s:log.debug("quickmenu.event=", event)
 				let item.help = help
 			else
 				let item.text = '     '.curline
@@ -535,6 +543,7 @@ endfunc
 function! s:expand_text(string) abort
 	let partial = []
 	let index = 0
+	silent! call s:log.debug("wilson before=", a:string)
 	while 1
 		let pos = stridx(a:string, '%{', index)
 		if pos < 0
@@ -558,6 +567,7 @@ function! s:expand_text(string) abort
 			let partial += [result]
 		endif
 	endwhile
+	silent! call s:log.debug("wilson after=", join(partial, ''))
 	return join(partial, '')
 endfunc
 
