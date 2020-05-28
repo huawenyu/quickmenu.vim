@@ -418,7 +418,7 @@ function! <SID>quickmenu_execute(index) abort
 		if type(item.event) == 1
 			if item.event[0] != '='
 				exec item.event
-				silent! call s:log.debug("exec quickmenu.event=", item.event)
+				"silent! call s:log.debug("exec quickmenu.event=", item.event)
 			else
 				let script = matchstr(item.event, '^=\s*\zs.*')
 			endif
@@ -522,7 +522,7 @@ function! s:menu_expand(item) abort
 				let item.key = a:item.key
 				"let item.event = a:item.event
 				let item.event = event
-				silent! call s:log.debug("quickmenu.event=", event)
+				"silent! call s:log.debug("quickmenu.event=", event)
 				let item.help = help
 			else
 				let item.text = '     '.curline
@@ -543,7 +543,7 @@ endfunc
 function! s:expand_text(string) abort
 	let partial = []
 	let index = 0
-	silent! call s:log.debug("wilson before=", a:string)
+	"silent! call s:log.debug("wilson before=", a:string)
 	while 1
 		let pos = stridx(a:string, '%{', index)
 		if pos < 0
@@ -567,7 +567,7 @@ function! s:expand_text(string) abort
 			let partial += [result]
 		endif
 	endwhile
-	silent! call s:log.debug("wilson after=", join(partial, ''))
+	"silent! call s:log.debug("wilson after=", join(partial, ''))
 	return join(partial, '')
 endfunc
 
